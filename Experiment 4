@@ -1,0 +1,108 @@
+package internals;
+import java.util.Scanner;
+
+class Contact {
+    private String contactId;
+    private String name;
+    private long phoneNumber;
+    private String email;
+    private String address;
+
+    // Constructor
+    public Contact(String contactId, String name, long phoneNumber, String email, String address) {
+        this.contactId = contactId;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+    }
+
+    // Displaying contact
+    public void displayContact() {
+        System.out.println("\n-- Contact Details --");
+        System.out.println("Contact ID: " + contactId);
+        System.out.println("Name: " + name);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Email ID: " + email);
+        System.out.println("Address: " + address);
+    }
+
+    // Update Phone Number
+    public void updatePhoneNumber(long newNumber) {
+        this.phoneNumber = newNumber;
+        System.out.println("Phone Number updated to: " + phoneNumber);
+    }
+
+    // Update Email ID
+    public void updateEmailID(String newEmailID) {
+        this.email = newEmailID;
+        System.out.println("Email ID updated to: " + email);
+    }
+}
+
+public class ContactDetails {
+    // Main method with runtime input
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Taking contact details from user
+        System.out.print("Enter Contact ID: ");
+        String id = sc.nextLine();
+
+        System.out.print("Enter Contact Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Phone Number: ");
+        long phoneNumber = sc.nextLong();
+        sc.nextLine(); // clear buffer
+
+        System.out.print("Enter Email ID: ");
+        String email = sc.nextLine();
+
+        System.out.print("Enter Address: ");
+        String address = sc.nextLine();
+
+        // Create contact object
+        Contact contact = new Contact(id, name, phoneNumber, email, address);
+
+        // Menu-driven operations
+        int choice;
+        do {
+            System.out.println("\n-- Contact Details Menu --");
+            System.out.println("1. Update Phone Number");
+            System.out.println("2. Update Email ID");
+            System.out.println("3. Display Contact Info");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine(); // clear buffer
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new Phone Number: ");
+                    long newNumber = sc.nextLong();
+                    contact.updatePhoneNumber(newNumber);
+                    break;
+
+                case 2:
+                    System.out.print("Enter new Email ID: ");
+                    String newEmailID = sc.nextLine();
+                    contact.updateEmailID(newEmailID);
+                    break;
+
+                case 3:
+                    contact.displayContact();
+                    break;
+
+                case 4:
+                    System.out.println("Exiting... Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        } while (choice != 4);
+
+        sc.close();
+    }
+}
