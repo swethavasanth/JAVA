@@ -1,0 +1,128 @@
+package Git;
+import java.util.Scanner;
+class Account {
+ protected String custName;
+ protected int accNo;
+ protected double balance;
+ public Account(String custName, int accNo, double balance) {
+     this.custName = custName;
+     this.accNo = accNo;
+     this.balance = balance;
+ }
+ public void viewBalance() {
+     System.out.println("Account Holder: " + custName);
+     System.out.println("Account No: " + accNo);
+     System.out.println("Current Balance: " + balance);
+ }
+ public void deposit(double amount) {
+     balance += amount;
+     System.out.println("Amount Deposited: " + amount);
+     System.out.println("Updated Balance: " + balance);
+ }
+ public void withdraw(double amount) {
+     if (balance >= amount) {
+         balance -= amount;
+         System.out.println("Amount Withdrawn: " + amount);
+     } else {
+         System.out.println("Insufficient Balance!");
+     }
+ }
+}
+class SavingsAccount extends Account {
+ private double interestRate = 0.06; 
+
+ public SavingsAccount(String custName, int accNo, double balance) {
+     super(custName, accNo, balance);
+ }
+ public void deposit(double amount) {
+     double interest = amount * interestRate;
+     balance += amount + interest;
+     System.out.println("Amount Deposited with Interest: " + (amount + interest));
+     System.out.println("Updated Balance: " + balance);
+ }
+ public void withdraw(double amount) {
+     if (balance >= amount) {
+         balance -= amount;
+         System.out.println("Amount Withdrawn: " + amount);
+         System.out.println("Updated Balance: " + balance);
+     } else {
+         System.out.println("Overdrawn not possible in Savings Account!");
+     }
+ }
+}
+class CurrentAccount extends Account {
+ private double serviceCharge = 0.035; 
+ public CurrentAccount(String custName, int accNo, double balance) {
+     super(custName, accNo, balance);
+ }
+ public void withdraw(double amount) {
+     if (balance >= amount) {
+         balance -= amount;
+         System.out.println("Amount Withdrawn: " + amount);
+         System.out.println("Updated Balance: " + balance);
+     } else {
+         double overdraft = amount - balance;
+         double charge = overdraft * serviceCharge;
+         balance = balance - amount - charge; 
+         System.out.println("Overdraft Withdrawn: " + amount);
+         System.out.println("Service Charge Applied: " + charge);
+         System.out.println("Updated Balance (may be negative): " + balance);
+     }
+ }
+ public void deposit(double amount) {
+     balance += amount; 
+     System.out.println("Amount Deposited: " + amount);
+     System.out.println("Updated Balance: " + balance);
+ }
+}
+public class Bank {
+ public static void main(String[] args) {
+	 System.out.println("URK24CS6005\nSWETHA");
+     Scanner sc = new Scanner(System.in);
+     SavingsAccount sa = new SavingsAccount("Arun", 101, 5000);
+     CurrentAccount ca = new CurrentAccount("Meera", 202, 10000);
+     Account ref; 
+     while (true) {
+         System.out.println("\n===== BANK MENU =====");
+         System.out.println("1. Savings Account");
+         System.out.println("2. Current Account");
+         System.out.println("3. Exit");
+         System.out.print("Choose: ");
+         int choice = sc.nextInt();
+         if (choice == 3) {
+             System.out.println("Exiting... Bye!");
+             break;
+         }
+         if (choice == 1) {
+             ref = sa; // polymorphism
+         } else {
+             ref = ca;
+         }
+         System.out.println("\n--- Operations ---");
+         System.out.println("1. View Balance");
+         System.out.println("2. Deposit");
+         System.out.println("3. Withdraw");
+         System.out.print("Choose: ");
+         int op = sc.nextInt();
+         switch (op) {
+             case 1:
+                 ref.viewBalance();
+                 break;
+             case 2:
+                 System.out.print("Enter amount to deposit: ");
+                 double damt = sc.nextDouble();
+                 ref.deposit(damt);
+                 break;
+             case 3:
+                 System.out.print("Enter amount to withdraw: ");
+                 double wamt = sc.nextDouble();
+                 ref.withdraw(wamt);
+                 break;
+             default:
+                 System.out.println("Invalid choice!");
+         }
+     }
+     sc.close();
+ }
+}
+
