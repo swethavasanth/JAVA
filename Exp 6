@@ -39,7 +39,7 @@ System.out.println("Invalid deposit amount.");
 public void withdraw(double cash) {
 if(cash<balance) {
 balance = balance - cash;
-System.out.println("Withdraw: " + balance);
+System.out.println("Balance: " + balance);
 }else {
 System.out.println("Insufficient Balance.");
 }
