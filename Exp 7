@@ -1,0 +1,66 @@
+package Octo;
+import java.util.Scanner;
+import Octo.Account;
+import Octo.InvalidATMPinException;
+import Octo.NoCashException;
+class InvalidATMPinException extends Exception {
+ InvalidATMPinException(String msg) {
+     super(msg);
+ }
+}
+class NoCashException extends Exception {
+ NoCashException(String msg) {
+     super(msg);
+ }
+}
+class Account {
+ String name;
+ double balance;
+ int atmPin;
+ Account(String name, double balance, int atmPin) {
+     this.name = name;
+     this.balance = balance;
+     this.atmPin = atmPin;
+ }
+ void checkPin(int enteredPin) throws InvalidATMPinException {
+     if (enteredPin != atmPin) {
+         throw new InvalidATMPinException("Invalid ATM Pin.Try again");
+     } else {
+         System.out.println("Pin Verified");
+     }
+ }
+ void withdraw(double amount) throws NoCashException {
+     if (amount > balance) {
+         throw new NoCashException("Insufficient Balance!");
+     } else {
+         balance -= amount;
+         System.out.println("Withdrawal Successful\nRemaining Balance: ₹" + balance);
+     }
+ }
+}
+public class Acc {
+ public static void main(String[] args) {
+     Scanner sc = new Scanner(System.in);
+     Account acc = new Account("Swe", 5000.0, 1234);
+
+     try {
+         System.out.print("Enter your ATM Pin: ");
+         int enteredPin = sc.nextInt();
+         acc.checkPin(enteredPin);
+
+         System.out.print("Enter amount to withdraw: ");
+         double amount = sc.nextDouble();
+         acc.withdraw(amount);
+     } 
+     catch (InvalidATMPinException e) {
+         System.out.println("Error: " + e.getMessage());
+     } 
+     catch (NoCashException e) {
+         System.out.println("Error: " + e.getMessage());
+     } 
+     finally {
+         System.out.println("Transaction Completed");
+         sc.close();
+     }
+ }
+}
