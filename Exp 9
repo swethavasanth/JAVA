@@ -1,0 +1,154 @@
+package Exp9;
+import java.io.*;
+import java.util.Scanner;
+public class FileHandling {
+    // Method to create a new file
+    public static void createFile(String fileName) {
+        try {
+            File file = new File(fileName);
+            if (file.createNewFile()) {
+                System.out.println("File created successfully: " + file.getName());
+            } else {
+                System.out.println("File already exists!");
+            }
+        } catch (IOException e) {
+            System.out.println("Error creating file: " + e.getMessage());
+        }
+    }
+    // Method to rename a file
+    public static void renameFile(String oldName, String newName) {
+        File oldFile = new File(oldName);
+        File newFile = new File(newName);
+        if (oldFile.renameTo(newFile)) {
+            System.out.println("File renamed successfully!");
+        } else {
+            System.out.println("Rename failed!");
+        }
+    }
+    // Method to delete a file
+    public static void deleteFile(String fileName) {
+        File file = new File(fileName);
+        if (file.delete()) {
+            System.out.println("File deleted successfully!");
+        } else {
+            System.out.println("File not found or deletion failed.");
+        }
+    }
+    // Method to create a directory
+    public static void createDirectory(String dirName) {
+        File dir = new File(dirName);
+        if (dir.mkdir()) {
+            System.out.println("Directory created successfully!");
+        } else {
+            System.out.println("Directory creation failed or already exists.");
+        }
+    }
+    // Method to find absolute path of a file
+    public static void getAbsolutePath(String fileName) {
+        File file = new File(fileName);
+        System.out.println("Absolute Path: " + file.getAbsolutePath());
+    }
+    // Method to display all file names in a directory
+    public static void displayFiles(String dirPath) {
+        File folder = new File(dirPath);
+        if (folder.exists() && folder.isDirectory()) {
+            String[] files = folder.list();
+            System.out.println("Files in directory:");
+            for (String f : files) {
+                System.out.println("- " + f);
+            }
+        } else {
+            System.out.println("Invalid directory path!");
+        }
+    }
+    // Method to analyze bank transactions
+    public static void analyzeTransactions(String inputFile, String outputFile) {
+        int successCount = 0, failedCount = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length == 4) {
+                    String status = parts[3].trim();
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        successCount++;
+                    } else if (status.equalsIgnoreCase("FAILED")) {
+                        failedCount++;
+                    }
+                }
+            }
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
+                bw.write("=== TRANSACTION SUMMARY REPORT ===\n");
+                bw.write("Total Successful Transactions: " + successCount + "\n");
+                bw.write("Total Failed Transactions: " + failedCount + "\n");
+            }
+
+            System.out.println("Summary report created successfully as '" + outputFile + "'");
+
+        } catch (IOException e) {
+            System.out.println("Error processing transactions: " + e.getMessage());
+        }
+    }
+    // Main method with menu
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n========== FILE HANDLING MENU ==========");
+            System.out.println("1. Create a new file");
+            System.out.println("2. Rename a file");
+            System.out.println("3. Delete a file");
+            System.out.println("4. Create a directory");
+            System.out.println("5. Find absolute path of a file");
+            System.out.println("6. Display all file names in a directory");
+            System.out.println("7. Analyze bank transactions (Bonus Task)");
+            System.out.println("8. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine(); // clear buffer
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter file name to create: ");
+                    createFile(sc.nextLine());
+                    break;
+                case 2:
+                    System.out.print("Enter existing file name: ");
+                    String oldName = sc.nextLine();
+                    System.out.print("Enter new file name: ");
+                    renameFile(oldName, sc.nextLine());
+                    break;
+                case 3:
+                    System.out.print("Enter file name to delete: ");
+                    deleteFile(sc.nextLine());
+                    break;
+                case 4:
+                    System.out.print("Enter directory name to create: ");
+                    createDirectory(sc.nextLine());
+                    break;
+                case 5:
+                    System.out.print("Enter file name: ");
+                    getAbsolutePath(sc.nextLine());
+                    break;
+                case 6:
+                    System.out.print("Enter directory path: ");
+                    displayFiles(sc.nextLine());
+                    break;
+                case 7:
+                    System.out.println("Analyzing bank transactions...");
+                    analyzeTransactions("transactions.txt", "summary.txt");
+                    break;
+                case 8:
+                    System.out.println("Exiting program. Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Try again!");
+            }
+
+        } while (choice != 8);
+
+        sc.close();
+    }
+}
